@@ -144,11 +144,11 @@ class Solution:
         print(self.nums)
         self.targetsum = 0
         self.nsum = 3
-        self.result = set()
-        #self.result = []
+        self.result = []
         locallist = []
+        #self.previous = None
         self.rec_sum(locallist=locallist,lidx=0,targetsum = self.targetsum,nsum=self.nsum)
-        return [list(t) for t in self.result]
+        return self.result
     
     def rec_sum(self, locallist,lidx,targetsum,nsum):
  
@@ -156,11 +156,10 @@ class Solution:
         l = lidx
         r = len(self.nums)-1
         print(f"-:   {remain_targetsum}; {locallist} {self.nums[l:]}, {nsum}, [{l} {r}]")
-
         if nsum == 2:
             l_prev_val = None
             r_prev_val = None
-            print(f"--:  {remain_targetsum}; {locallist} {self.nums[l:]}, {nsum}")
+            #print(f"--:  {remain_targetsum}; {locallist} {self.nums[l:]}, {nsum}")
             while (l < r):
                 if l_prev_val == self.nums[l]:
                     l_prev_val = self.nums[l] 
@@ -179,8 +178,7 @@ class Solution:
                     tmp= locallist.copy()
                     tmp.append(self.nums[l])
                     tmp.append(self.nums[r])
-                    #self.result.append(tmp)
-                    self.result.add(tuple(tmp))
+                    self.result.append(tmp)
 
                     l_prev_val = self.nums[l] 
                     r_prev_val = self.nums[r]
@@ -192,23 +190,24 @@ class Solution:
                 elif twosum < remain_targetsum:
                     l_prev_val = self.nums[l]
                     l += 1
+            return
             
         elif lidx <= (len(self.nums) - nsum):
             remain_targetsum = remain_targetsum - self.nums[lidx]
             print("first rec call")
             self.rec_sum(locallist+[self.nums[lidx]],lidx+1,remain_targetsum,nsum-1)
 
-        if lidx <= (len(self.nums) - nsum): #and self.nums[lidx] != self.nums[lidx-1]:
-            print("second rec call")
-            self.rec_sum([],lidx+1,self.targetsum,self.nsum)
+        if lidx <= (len(self.nums) - nsum) and self.nums[lidx+1] != self.nums[lidx]:
+            print(f"second rec call")
+            self.rec_sum(locallist,lidx+1,self.targetsum,nsum)
 
 def main():
     #nums = [-1, 0, 1, 2, -1, -4]  # Output: [[-1,-1,2],[-1,0,1]]
     #nums = [-1,0,1,2,-1,-4]
-    #nums= [-1,0,4,2,-4,2,-2,-4] 
+    nums= [-1,0,4,2,-4,2,-2,-4] 
     #nums = [2,-3,0,-2,-5,-5,-4,1,2,-2,2,0,2,-4,5,5,-10] #output  [[-10,5,5],[-5,0,5],[-4,2,2],[-3,-2,5],[-3,1,2],[-2,0,2]]
     #nums=[0,0,0]
-    nums = [34,55,79,28,46,33,2,48,31,-3,84,71,52,-3,93,15,21,-43,57,-6,86,56,94,74,83,-14,28,-66,46,-49,62,-11,43,65,77,12,47,61,26,1,13,29,55,-82,76,26,15,-29,36,-29,10,-70,69,17,49]
+    #nums = [34,55,79,28,46,33,2,48,31,-3,84,71,52,-3,93,15,21,-43,57,-6,86,56,94,74,83,-14,28,-66,46,-49,62,-11,43,65,77,12,47,61,26,1,13,29,55,-82,76,26,15,-29,36,-29,10,-70,69,17,49]
     #4sum
     #nums = [-1,1,2,-2,0,4]
     #nums = [1,2,3,4,5,6,1,2]  #targetsum = 15
