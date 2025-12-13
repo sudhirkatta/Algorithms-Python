@@ -147,10 +147,10 @@ class Solution:
         self.result = []
         locallist = []
         #self.previous = None
-        self.rec_sum(locallist=locallist,lidx=0,targetsum = self.targetsum,nsum=self.nsum)
+        self.rec_sum(locallist,0,self.targetsum,self.nsum, None)
         return self.result
     
-    def rec_sum(self, locallist,lidx,targetsum,nsum):
+    def rec_sum(self, locallist,lidx,targetsum,nsum, previous):
  
         remain_targetsum = targetsum
         l = lidx
@@ -195,11 +195,13 @@ class Solution:
         elif lidx <= (len(self.nums) - nsum):
             remain_targetsum = remain_targetsum - self.nums[lidx]
             print("first rec call")
-            self.rec_sum(locallist+[self.nums[lidx]],lidx+1,remain_targetsum,nsum-1)
+            if previous != self.nums[lidx]:
+                previous = self.nums[lidx]
+                self.rec_sum(locallist+[self.nums[lidx]],lidx+1,remain_targetsum,nsum-1, previous)
 
-        if lidx <= (len(self.nums) - nsum) and self.nums[lidx+1] != self.nums[lidx]:
+        if lidx <= (len(self.nums) - nsum): #and self.nums[lidx+1] != self.nums[lidx]:
             print(f"second rec call")
-            self.rec_sum(locallist,lidx+1,self.targetsum,nsum)
+            self.rec_sum(locallist,lidx+1,self.targetsum,nsum, previous)
 
 def main():
     #nums = [-1, 0, 1, 2, -1, -4]  # Output: [[-1,-1,2],[-1,0,1]]
